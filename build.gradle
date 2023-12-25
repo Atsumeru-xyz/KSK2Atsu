@@ -1,0 +1,57 @@
+plugins {
+    id 'idea'
+    id 'java'
+    id 'application'
+    id 'io.freefair.lombok' version '8.3'
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+}
+
+mainClassName = 'xyz.atsumeru.ksk2atsu.App'
+group = 'xyz.atsumeru'
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+compileJava.options.encoding = 'UTF-8'
+System.setProperty('file.encoding', 'UTF-8')
+
+dependencies {
+    // AnnotationsProcessors
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+    // ORMLite
+    implementation 'com.j256.ormlite:ormlite-core:4.48'
+    implementation 'com.j256.ormlite:ormlite-jdbc:4.48'
+    implementation 'org.xerial:sqlite-jdbc:3.43.2.1'
+
+    // OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:3.12.3'
+
+    // Json
+    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'org.json:json:20230227'
+
+    // YAML Parser
+    implementation 'org.yaml:snakeyaml:1.21'
+
+    // Apache Commons
+    implementation 'commons-io:commons-io:2.7'
+
+    // Natural Comparator
+    implementation 'net.grey-panther:natural-comparator:1.1'
+
+    // Fuzzy Search
+    implementation 'me.xdrop:fuzzywuzzy:1.2.0'
+
+    // ConsoleUI
+    implementation 'de.codeshelf.consoleui:consoleui:0.0.13'
+
+    // CLI ProgressBar
+    implementation 'me.tongfei:progressbar:0.9.3'
+
+    // SLF4J
+    implementation 'org.slf4j:slf4j-api:2.0.9'
+    implementation 'org.slf4j:slf4j-nop:2.0.9'
+}
