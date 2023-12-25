@@ -2,7 +2,7 @@
 
 *Disclaimer: we DO NOT support piracy! Use this app only with legally obtained content. There is no links to any **pirated** content. If you brave enough, find them by yourself!*
 
-### Description!
+### Description
 
 <p align="center">
   <img src="cli.png" alt="CLI app">
