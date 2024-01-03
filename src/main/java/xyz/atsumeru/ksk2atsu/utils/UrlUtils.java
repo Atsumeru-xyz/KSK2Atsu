@@ -6,7 +6,7 @@ package xyz.atsumeru.ksk2atsu.utils;
 public class UrlUtils {
 
     /**
-     * Get hostname from given url. Example: <b>https://music.youtube.com/premium</b> -> <b>youtube</b>
+     * Get hostname from given url. Example: <b>https://some.example.com/page</b> -> <b>example</b>
      *
      * @param link url as {@link String}
      * @return url hostname
@@ -30,7 +30,7 @@ public class UrlUtils {
     }
 
     /**
-     * Get host from given url. Example: <b>https://music.youtube.com/premium</b> -> <b>music.youtube.com</b>
+     * Get host from given url. Example: <b>https://some.example.com/page</b> -> <b>some.example.com</b>
      *
      * @param link url as {@link String}
      * @return url host
