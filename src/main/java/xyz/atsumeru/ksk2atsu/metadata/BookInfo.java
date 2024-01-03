@@ -63,14 +63,16 @@ public class BookInfo {
      * @param isSerie     indicates if actual metadata is intended for Atsumeru Serie
      * @param isDoujinshi indicates that actual Atsumeru Archive is {@link CatalogType#DOUJIN} and depending on that,
      *                    some result metadata will change
+     * @return true if content was saved
      */
-    public static void saveIntoArchive(File archive, Content content, String serieHash, String contentHash, boolean isSerie, boolean isDoujinshi) {
+    public static boolean saveIntoArchive(File archive, Content content, String serieHash, String contentHash, boolean isSerie, boolean isDoujinshi) {
         try (ZipIterator zipIterator = ZipIterator.open(archive)) {
             Map<String, String> contentToSave = new HashMap<>();
             contentToSave.put(App.BOOK_INFO_JSON, toJSON(content, serieHash, contentHash, isSerie, isDoujinshi).toString(4));
-            zipIterator.saveIntoArchive(archive.toString(), contentToSave);
+            return zipIterator.saveIntoArchive(archive.toString(), contentToSave);
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 
