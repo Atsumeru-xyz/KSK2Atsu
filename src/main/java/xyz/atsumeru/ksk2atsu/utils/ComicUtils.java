@@ -92,6 +92,16 @@ public class ComicUtils {
     }
 
     /**
+     * Remove all non-alphabetic, non-numerical and Space symbols in given {@link String}
+     *
+     * @param title input {@link String}
+     * @return cleaned {@link String}
+     */
+    public static String removeNonAlphanumericalSymbols(String title) {
+        return title.replaceAll("[^a-zA-Z0-9\\s]", "").replaceAll(" +", " ").trim();
+    }
+
+    /**
      * Replace denied Windows FS symbols for special Japanese analogs in given {@link String} that may be used for file naming
      *
      * @param title input {@link String}
@@ -160,71 +170,83 @@ public class ComicUtils {
      * @param artist input {@link String}
      * @return safe Windows FS filename
      */
-    public static String getTitleWithArtistAndReplacedDeniedSymbols(String title, String artist) {
-        return String.format("[%s] %s", StringUtils.isNotEmpty(artist) ? artist : App.UNKNOWN, getTitleReplacedDeniedSymbols(title));
+    public static String getTitleWithArtistWithoutDeniedSymbols(String title, String artist) {
+        return removeNonAlphanumericalSymbols(String.format("%s %s", artist, title));
     }
 
     /**
-     * Replace denied Windows FS symbols for special Japanese analogs in given title with author {@link String} that may
-     * be used for file naming with additional name cleaning from square, round, curly brackets and some predefined "trash"
+     * Remove denied Windows FS symbols and author in given title with author {@link String} that may be used for
+     * file naming with additional name cleaning from square, round, curly brackets and some predefined "trash"
      *
      * @param title input {@link String}
      * @return safe Windows FS filename
      */
-    public static String getTitleWithAuthorAndReplacedDeniedSymbols(String title) {
-        return getTitleReplacedDeniedSymbols(title.replace(".cbz", ""))
-                .replaceAll("^\\(.*?\\) ", "")
-                .replaceAll("\\[.*?\\((.*?)\\)]", "[$1]")
-                .replaceAll("\\([^()]*\\)(?!.*?\\([^()]*\\))$", "")
-                .trim()
-                // Replace some other trash from names
-                .replace("[digital]", "")
-                .replace("[decensored]", "")
-                .replace("[english]", "")
-                .replace("[2d market]", "")
-                .replace("[2d-market]", "")
-                .replace("[2d-market.com]", "")
-                .replace("[irodori comics]", "")
-                .replace("[fakku irodori comics]", "")
-                .replace("[fakku & irodori comics]", "")
-                .replace("[not fakku]", "")
-                .replace("[fakku]", "")
-                .replace("fakku]", "")
-                .replace("[png]", "")
-                .replace("[]", "")
-                .replace("[]", "")
-                .replace("(x1518)", "")
-                .replace("(x1920)", "")
-                .replace("(1920x)", "")
-                .replace("(x2000)", "")
-                .replace("(2560x)", "")
-                .replace("(x2600)", "")
-                .replace("(x2880)", "")
-                .replace("(x3038)", "")
-                .replace("(x3100)", "")
-                .replace("(x3100+)", "")
-                .replace("(x3199)", "")
-                .replace("(x3200)", "")
-                .replace("(x3200-improper)", "")
-                .replace("(png)", "")
-                .replace("(fakku)", "")
-                .replace("(full color version)", "")
-                .replace("{2d-market.com}", "")
-                .replace("x3200 fakku", "")
-                .replace("x3200", "")
-                .trim()
-                // Replace last square brackets multiple times
-                .replaceAll("\\[[^]]*]+$", "")
-                .replaceAll("\\[[^]]*]+$", "")
-                .replaceAll("\\[[^]]*]+$", "")
-                .replaceAll("\\[[^]]*]+$", "")
-                .replaceAll("\\[[^]]*]+$", "")
-                .trim()
-                // Replace last round brackets
-                .replaceAll("\\([^]]*\\)+$", "")
-                .trim()
-                .toLowerCase()
-                .trim();
+    public static String getCleanTitleWithoutAuthor(String title) {
+        return getCleanTitleWithAuthor(title.replaceAll("^(\\[.*?])", ""));
+    }
+
+    /**
+     * Remove denied Windows FS symbols in given title with author {@link String} that may be used for file naming
+     * with additional name cleaning from square, round, curly brackets and some predefined "trash"
+     *
+     * @param title input {@link String}
+     * @return safe Windows FS filename
+     */
+    public static String getCleanTitleWithAuthor(String title) {
+        return removeNonAlphanumericalSymbols(
+                title.toLowerCase()
+                        .replace(".cbz", "")
+                        .replaceAll("^\\(.*?\\) ", "")
+                        .replaceAll("\\[.*?\\((.*?)\\)]", "[$1]")
+                        .replaceAll("\\([^()]*\\)(?!.*?\\([^()]*\\))$", "")
+                        .trim()
+                        // Replace some other trash from names
+                        .replace("[digital]", "")
+                        .replace("[decensored]", "")
+                        .replace("[english]", "")
+                        .replace("[2d market]", "")
+                        .replace("[2d-market]", "")
+                        .replace("[2d-market.com]", "")
+                        .replace("[irodori comics]", "")
+                        .replace("[fakku irodori comics]", "")
+                        .replace("[fakku & irodori comics]", "")
+                        .replace("[not fakku]", "")
+                        .replace("[fakku]", "")
+                        .replace("fakku]", "")
+                        .replace("[png]", "")
+                        .replace("[]", "")
+                        .replace("[]", "")
+                        .replace("(x1518)", "")
+                        .replace("(x1920)", "")
+                        .replace("(1920x)", "")
+                        .replace("(x2000)", "")
+                        .replace("(2560x)", "")
+                        .replace("(x2600)", "")
+                        .replace("(x2880)", "")
+                        .replace("(x3038)", "")
+                        .replace("(x3100)", "")
+                        .replace("(x3100+)", "")
+                        .replace("(x3199)", "")
+                        .replace("(x3200)", "")
+                        .replace("(x3200-improper)", "")
+                        .replace("(png)", "")
+                        .replace("(fakku)", "")
+                        .replace("(full color version)", "")
+                        .replace("{2d-market.com}", "")
+                        .replace("x3200 fakku", "")
+                        .replace("x3200", "")
+                        .trim()
+                        // Replace last square brackets multiple times
+                        .replaceAll("\\[[^]]*]+$", "")
+                        .replaceAll("\\[[^]]*]+$", "")
+                        .replaceAll("\\[[^]]*]+$", "")
+                        .replaceAll("\\[[^]]*]+$", "")
+                        .replaceAll("\\[[^]]*]+$", "")
+                        .trim()
+                        // Replace last round brackets
+                        .replaceAll("\\([^]]*\\)+$", "")
+                        .trim()
+        );
     }
 
     /**
@@ -303,95 +325,129 @@ public class ComicUtils {
      * @return fixed {@link String}
      */
     public static String fixKnownTitleIssues(String title) {
-        if (title.contains("yukari-san to opuro de nurunurunu")) {
-            return "flirtatious soap play in a bath with yukari";
-        } else if (title.contains("uchi no dame ane ni osowarete tajitaji")) {
-            return "my no-good sister's overwhelming seduction technique";
-        } else if (title.contains("secret recipe 3-shiname secret recipe vol. 3")) {
-            return "secret recipe vol. 3";
-        } else if (title.contains("sexy snakey")) {
-            return "sexy snakey (naughty foxy 8)";
-        } else if (title.contains("kyonyuu no onee-chan wa suki desu")) {
-            return "do you like big sis' big tits? duo";
-        } else if (title.contains("kono subarashii chaldea ni ai o")) {
-            return "kamadeva's blessing on this wonderful chaldea";
-        } else if (title.contains("aigan robot lilly - pet robot lilly vol. 3")) {
-            return "pet robot lilly - volume 3";
-        } else if (title.contains("yuzuki yukari in dragon quest yuzuki yukari's lewd dragon quest adventure")) {
-            return "yukari yuzuki's lewd dragon quest adventure";
-        } else if (title.contains("sachi-chan no arbeit 2")) {
-            return "sachi's part-time job 2";
-        } else if (title.contains("sachi-chan no arbeit 3")) {
-            return "sachi's part-time job 3";
-        } else if (title.contains("sachi-chan no arbeit 4")) {
-            return "sachi's part-time job 4";
-        } else if (title.contains("sachi's part-time job")) {
-            return "sachi's part-time job";
-        } else if (title.contains("love sex arcade princess and a virgin boy")) {
-            return "arcade princess and a virgin boy who make out and have lovey-dovey baby-making sex";
-        } else if (title.contains("become my manservant")) {
-            return "become my manservant";
-        } else if (title.contains("transformation syndrome")) {
-            return "transformation syndrome";
-        } else if (title.contains("do lewd things with sapphire 1")) {
-            return "do you wanna do lewd things with sapphire 1";
-        } else if (title.contains("two flowers for two delivery")) {
-            return "two flowers for two delivery girls - dog girl and winged girl make steamy happy love with their new dicks";
-        } else if (title.contains("hypnotic sexual counseling 2.5")) {
-            return "hypnotic sexual counseling 2.5";
-        } else if (title.contains("mating 11")) {
-            return "assisted mating 11";
-        } else if (title.contains("obscene academy 3")) {
-            return "obscene academy 3";
-        } else if (title.contains("breaking in the new hire")) {
-            return "breaking in the new hire (another man's wife vs the college student)";
-        } else if (title.contains("choko 5")) {
-            return "choko 5 - requited love, unrequited lust";
-        } else if (title.contains("choko iii")) {
-            return "choko 3 - more than a friend, less than a girlfriend";
-        } else if (title.contains("choko iv")) {
-            return "choko 4 - she was her uncle's sex toy, and then she seduced her cousin";
-        } else if (title.contains("the shame train 4")) {
-            return "the shame train 4 - satisfying my boyfriend's fetish";
-        } else if (title.contains("succubus delivery?? vol. 2.0")) {
-            return "succubus delivery  vol. 2.0 - my report on the time i was devoured by three succubi";
-        } else if (title.contains("succubus delivery")) {
-            return "succubus delivery my report on the time i called a pair of succubus call girls";
-        } else if (title.contains("ane naru mono 4")) {
-            return "ane naru mono the elder-sister like one 4";
-        } else if (title.contains("ane naru mono 5")) {
-            return "ane naru mono the elder-sister like one 5";
-        } else if (title.contains("ane naru mono 6")) {
-            return "ane naru mono the elder-sister like one 6";
-        } else if (title.contains("ane naru mono 7")) {
-            return "ane naru mono the elder-sister like one 7";
-        } else if (title.contains("puzzle dragons scrapbook")) {
-            return "p&d books - puzzle & dragons scrapbook";
-        } else if (title.contains("fox widow")) {
-            return "fox widow ms. yuiko (kanto area, in her 30s)";
-        } else if (title.contains("little miss debaucherous 7")) {
-            return "little miss debaucherous 7";
-        } else if (title.contains("i brought home a runaway")) {
-            return "i brought home a runaway (and she lets me make a mess inside her)";
-        } else if (title.contains("imaizumin 5")) {
-            return "imaizumi brings all the gyarus to his house 5";
-        } else if (title.contains("my ex-lovers kid is my sons friend")) {
-            return "sins of the past";
-        } else if (title.contains("i regret to inform that")) {
-            return "girls form - volume 09 - [akazawa red] i regret to inform that the hero's log has disappeared";
-        } else if (title.contains("metamorphosis")) {
-            return "metamorphosis (emergence)";
-        } else if (title.contains("hands-on draining with three succubus sisters - ch. 1")) {
-            return "hands-on draining with three succubus sisters - chapter 1: lamy's secret";
-        } else if (title.contains("sweet life in another world 5")) {
-            return "sweet life in another world 5: are you into an elf mom";
-        } else if (title.contains("the biggest loser")) {
-            return "the biggest loser (winner)";
-        } else if (title.contains("field trip with my first crush")) {
-            return "field trip with my first crush and the bad crowd";
-        } else if (title.contains("no one does it like you brother")) {
-            return "sasuoni! - no one does it like you, brother! 1";
+        if (title.equals("navier haruka 2t succubus delivery")) {
+            return "navier haruka 2t succubusdelivery my report on the time i called a pair of succubus call girls";
         }
-        return title;
+
+        return title.replace("mutya mako chans development diary", "mutya makochans development diary")
+                .replace("chiyami i love my admiral 1", "chiyami i love my admiral")
+                .replace("do you like naughty older girls", "do you like naughty older girls 1")
+                .replace("ryunosuke endless orgasms tentacle world", "ryunosuke endless orgasm tentacle world")
+                .replace("murasakiiro orange rabbitch fuck", "murasakiiro orange rabbitchuck")
+                .replace("nekoi hikaru factory of nekoi 02 danzou to tamamo no soapland", "nekoi hikaru factory of nekoi 02 danzo tamamo soapland")
+                .replace("otoo evil at heart 1 and 2", "otoo evil at heart 1 2")
+                .replace("tsumetoro naughty foxy 11", "tsumetoro naughty foxy vol11")
+                .replace("awayume suzuya cosplay report", "awayume suzuya cosplay resort")
+                .replace("bangyou butchau shindo l super panpanronpa 1 2", "bangyou butchau shindo l super panpanronpa 12")
+                .replace("aiue oka hypnotic sexual counseling 25 followup", "aiue oka hypnotic sexual counseling 25")
+                .replace("anzayuu sweet life in another world are you into an older elf ladys friend 2", "anzayuu sweet life in another world 2 are you into an older elf ladys friend")
+                .replace("anzayuu sweet life in another world are you into an older elf lady", "anzayuu sweet life in another world 1 are you into an older elf lady")
+                .replace("ayakase chiyoko the reason i shoplifted", "ayakase chiyoko the reason why i shoplifted")
+                .replace("kogaku kazuya an saya banglissimo", "kogaku kazuya ansaya banglissimo")
+                .replace("kogaku kazuya makichans first time with nicochan", "kogaku kazuya makichans first time with nicochan futa ver")
+                .replace("doku denpa the princessi is a slut", "doku denpa the princess is a slut")
+                .replace("homunculus courting etranger", "homunculus courting tranger")
+                .replace("ichinomiya yuu corrupt check up", "ichinomiya yuu corrupt checkup")
+                .replace("kitazato nawoki dance with the devil 1", "kitazato nawoki dance with the devil")
+                .replace("syomu my meat brings all the gyarus to the yard fakku", "syomu my meat brings all the gyarus to the yard")
+                .replace("marui maru cherrygals", "marui maru cherry gals")
+                .replace("prime erinas secret recipe vol 2", "prime secret recipe vol 2")
+                .replace("takeda aranobu the perverted virgin public morals committee members secret naughty request 3", "takeda aranobu the perverted anal virgin public morals committee members secret naughty request 3")
+                .replace("takeda hiromitsu ima real", "takeda hiromitsu imareal")
+                .replace("toyo traditional job of washing girls body volume 03", "toyo traditional job of washing girls body volume 3")
+                .replace("utu half ripe cherry", "utu halfripe cherry")
+                .replace("watanuki ron trauma sex clinic", "watanuki ron trauma sex clinic 1")
+                .replace("nemui neru would you allow us to serve you masterbutao", "nemui neru would you allow us to serve you master butao")
+                .replace("ayakawa riku eyeing the hot elf in another world 1", "ayakawa riku eyeing the hot elf in another world")
+                .replace("akari blast the hostess of this esteemed hot springs is a shameless sex addict", "akari blast the hostess of this esteemed hot springs is a shameless sex addict chapter 1")
+                .replace("akatsuki myuuto handson draining with three succubus sisters ch 1", "akatsuki myuuto handson draining with three succubus sisters chapter 1 lamys secret")
+                .replace("chilt sakurai 01 that time my own pupil schooled me on life", "chilt sakurai01 that time my own pupil schooled me on life")
+                .replace("arai kei knock up game", "arai kei knockup game")
+                .replace("ayakase chiyoko 3 vs 1 volleyball match 5 new years match", "ayakase chiyoko 3 vs 1 volleyball match 5 new years game")
+                .replace("ayakase chiyoko do you like slutty gyarus", "ayakase chiyoko do you like slutty gyarus 1")
+                .replace("ayakawa riku eyeing the hot elf in another world 1", "ayakawa riku eyeing the hot elf in another world")
+                .replace("ayane acting up an actress manager lust story", "ayane acting up an actress x manager lust story")
+                .replace("bambi cum dump duty excursion", "bambi cump dump duty excursion")
+                .replace("ashizuki the biggest loser", "ashizuki the biggest loser winner")
+                .replace("doku denpa loveydovey lickie sticky sex with babyfaced teacher", "doku denpa loveydovey lickie sticky sex with babyfaced teacher all to myself")
+                .replace("shindou mating with oni 7 banquet chapter", "shindou mating with oni banquet chapter")
+                .replace("kurosugatari my gfs mom has got it goin on dream", "kurosu gatari my gfs mom has got it goin on 1")
+                .replace("fujisaki chiro my relationship with mrs fujita 1", "fujisaki chiro my relationship with mrs fujita")
+                .replace("fukuyama naoto no one does it like you brother 3", "fukuyama naoto sasuoni no one does it like you brother 3")
+                .replace("fukuyama naoto no one does it like you brother 4", "fukuyama naoto sasuoni no one does it like you brother 4")
+                .replace("fukuyama naoto no one does it like you brother", "fukuyama naoto sasuoni no one does it like you brother 1")
+                .replace("higefurai my fabulous fuck day with my amazing mommy 1", "higefurai my fabulous fuck day with my amazing mommy")
+                .replace("ind kary choko livestream accident", "ind kary choko 1 livestream accident")
+                .replace("ginyou haru sex smartphone 1", "ginyou haru sex smart phone 1")
+                .replace("ginyou haru sex smartphone 2", "ginyou haru sex smart phone 2")
+                .replace("ginyou haru this volleyball girl got spiked with a sensual massage", "ginyou haru this volleyball girl got spiked with a sensual massage part 1")
+                .replace("kurosu gatari the seika girls and the schoolsanctioned gigolo", "kurosugatari the seika girls and the schoolsanctioned gigolo 1")
+                .replace("kurosu gatari the seika girls and the school sanctioned gigolo 6", "kurosu gatari the seika girls and the schoolsanctioned gigolo 6")
+                .replace("maimu maimu i met my friends gyaru mom in a soapland 1", "maimumaimu i met my friends gyaru mom in a soapland")
+                .replace("sasamori tomoe gaming harem", "sasamori tomoe gaming harem 1")
+                .replace("navier haruka 2t succubus delivery vol 30 my report on when i was delivered to a succubus harem that sucked me dry", "navier haruka 2t succubusdelivery vol 30 my report on when i was delivered to a succubus harem that sucked me dry")
+                .replace("orico allowance arms race", "orico allowance arms race 1")
+                .replace("nishimaki tohru scarlet desire ex 1", "nishimaki tohru scarlet desire ex")
+                .replace("navier haruka 2t the sweaty sticky swimmer", "navier haruka 2t the sweaty sticky summer")
+                .replace("puuzaki puuna fucked into submission 1", "puuzaki puuna fucked into submission")
+                .replace("puuzaki puuna the shy snow woman and the cursed ring chapter 2", "puuzaki puuna the shy snow woman and the cursed ring 2")
+                .replace("shake re temptation 1", "shake retemptation 1")
+                .replace("shake re temptation 2", "shake retemptation 2")
+                .replace("shindou puzzle dragons scrapbook", "shindou pd books puzzle dragons scrapbook")
+                .replace("syukuriin all for you", "syukuriin all for you 1")
+                .replace("ubuo i lost my tomboy friend to a huge cock", "ubuo i lost my tomboy friend to a huge cock 1")
+                .replace("cup chan sex with gender bender kodamachan", "cup chan sex with gender bender kodamachan 1")
+                .replace("yagino mekichi i love love love love love love love love you ver 2", "yaginomekichi i love love love love love love love love you ver2")
+                .replace("yuuki ringo red light district 2 milfdaughter ntr double the fun", "yuuki ringo red light district milfdaughter ntr double the fun")
+                .replace("yuuki ringo red light district 3 milf daughter ntr over the edge", "yuuki ringo red light district milfdaughter ntr over the edge")
+                .replace("yuuki ringo red light district milfdaughter ntr 2", "yuuki ringo red light district milfdaughter ntr")
+                .replace("konecha world where you can screw anyone", "konecha a world where you can screw anyone")
+                .replace("shituzhi i brought home a runaway", "shituzhi i brought home a runaway and she lets me make a mess inside her")
+                .replace("opcom arrest thy neighbor 1", "volvox arrest thy neighbor")
+                .replace("kuroe little miss debaucherous 7 extra 6", "kuroe little miss debaucherous 7")
+                .replace("kuroe little miss debaucherous 3", "kuroe little miss debaucherous 3 wavering heart honeydew in the night")
+                .replace("sorono fox widow ms yuiko", "sorono fox widow ms yuiko kanto area in her 30s")
+                .replace("navier haruka 2t succubus delivery vol 20", "navier haruka 2t succubus delivery vol 20 my report on the time i was devoured by three succubi")
+                .replace("neginegio obscene academy 3 island of despair", "neginegio obscene academy 3")
+                .replace("kuroe the shame train 4", "kuroe the shame train 4 satisfying my boyfriends fetish")
+                .replace("kuroe little miss debaucherous 2", "kuroe little miss debaucherous 2 public indecency")
+                .replace("ind kary choko 5", "ind kary choko 5 requited love unrequited lust")
+                .replace("freedom prophet field trip with my first crush", "freedom prophet field trip with my first crush and the bad crowd")
+                .replace("benzou stray gyaru harem 2", "benzou stray gyaru harem 2 loveydovey milking session")
+                .replace("anzayuu sweet life in another world 5", "anzayuu sweet life in another world 5 are you into an elf mom")
+                .replace("shindol metamorphosis", "shindo l metamorphosis emergence")
+                .replace("tachibana omina tales of a harem in another world vol 5 vol 55", "tachibana omina tales of a harem in another world vol 5 ambushed the wild succubus sisters appear vol 55")
+                .replace("akazawa red i regret to inform that the heros log has disappeared", "girls form - volume 09 - akazawa red i regret to inform that the heros log has disappeared")
+                .replace("sorono two flowers for two delivery girls", "sorono two flowers for two delivery girls dog girl and winged girl make steamy happy love with their new dicks")
+                .replace("usashiro mani gacen hime to dt otoko no ichaicha kozukuri love sex arcade princess and a virgin boy who make out and have loveydovey babymaking sex", "usashiro mani arcade princess and a virgin boy who make out and have loveydovey babymaking sex")
+                .replace("toitoi sachichan no arbeit sachis parttime job", "toitoi sachis parttime job")
+                .replace("toitoi sachichan no arbeit 4 sachis parttime job 4", "toitoi sachis parttime job 4")
+                .replace("toitoi sachichan no arbeit 3 sachis parttime job 3", "toitoi sachis parttime job 3")
+                .replace("toitoi sachichan no arbeit 2 sachis parttime job 2", "toitoi sachis parttime job 2")
+                .replace("hanauna yuzuki yukari in dragon quest yuzuki yukaris lewd dragon quest adventure", "hanauna yukari yuzukis lewd dragon quest adventure")
+                .replace("hanauna magical toilet girl yuusha 4", "hanauna magical toilet girl yuusha 4 yuushas unlucky losing spree")
+                .replace("hanauna magical toilet girl yuusha 3", "hanauna magical toilet girl yuusha 3 yuunas sweet summer vacation")
+                .replace("hanauna magical toilet girl yuusha 2", "hanauna magical toilet girl yuusha 2 a tenacious tentacles takedown")
+                .replace("satou saori aigan robot lilly pet robot lilly vol 3", "saori sato pet robot lilly volume 3")
+                .replace("mutya makochans developoment diary 2", "mutya makochans development diary 2")
+                .replace("tsumetoro sexy snakey", "tsumetoro sexy snakey naughty foxy 8")
+                .replace("petenshi yukarisan to opuro de nurunurunu chonu cho sugosu hon flirtatious soap play in a bath with yukari", "petenshi flirtatious soap play in a bath with yukari")
+                .replace("sanom uraha uchi no dame ane ni osowarete tajitaji nan desu ga my nogood sisters overwhelming seduction technique", "sanom my nogood sisters overwhelming seduction technique")
+                .replace("prime secret recipe 3shiname secret recipe vol 3", "prime secret recipe vol 3")
+                .replace("kouki kuu kyonyuu no oneechan wa suki desu ka duo do you like big sis big tits duo", "kouki kuu do you like big sis big tits duo")
+                .replace("chiyami kono subarashii chaldea ni ai o", "chiyami kamadevas blessing on this wonderful chaldea")
+                .replace("rubisama watashi no omocha ni narinasai become my manservant", "rubisama become my manservant")
+                .replace("73gou koudou ts hensei shoukougun ts transformation syndrome", "koyu transformation syndrome")
+                .replace("indo curry choko iii", "ind kary choko 3 more than a friend less than a girlfriend")
+                .replace("indo curry choko iv", "ind kary choko 4 she was her uncles sex toy and then she seduced her cousin")
+                .replace("kuroe little miss debaucherous 4", "kuroe little miss debaucherous 4 sensuous moans from his bedside")
+                .replace("maimu maimu breaking in the new hire", "maimumaimu breaking in the new hire another mans wife vs the college student")
+                .replace("norigorou imaizumin 5", "norigorou imaizumi brings all the gyarus to his house 5")
+                .replace("pochi ane naru mono 4", "pochi ane naru mono the eldersister like one 4")
+                .replace("pochi ane naru mono 5", "pochi ane naru mono the eldersister like one 5")
+                .replace("pochi ane naru mono 6", "pochi ane naru mono the eldersister like one 6")
+                .replace("pochi ane naru mono 7", "pochi ane naru mono the eldersister like one 7")
+                .replace("syomu my exlovers kid is my sons friend", "syomu sins of the past")
+                .replace("booch do lewd things with sapphire 1", "booch do you wanna do lewd things with sapphire 1");
     }
 }
