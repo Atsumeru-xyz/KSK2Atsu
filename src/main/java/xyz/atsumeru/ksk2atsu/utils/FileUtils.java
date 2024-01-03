@@ -109,4 +109,18 @@ public class FileUtils {
             }
         }
     }
+
+    /**
+     * Checks if given {@link File} directory is empty
+     *
+     * @param dir input {@link File} directory
+     * @return true if empty
+     */
+    public static boolean isDirectoryEmpty(File dir) {
+        try (Stream<Path> entries = Files.list(dir.toPath())) {
+            return entries.findFirst().isEmpty();
+        } catch (IOException e) {
+            return false;
+        }
+    }
 }
