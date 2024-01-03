@@ -408,7 +408,8 @@ public class FileMetadata {
         return magazine.replaceAll(" \\d+-\\d+", "")
                 .replaceAll(" #\\d+", "")
                 .replaceAll(" Vol.\\d+", "")
-                .replaceAll(" \\d+ \\w+", "");
+                .replaceAll(" \\d+ \\w+", "")
+                .replace("Comic", "COMIC");
     }
 
     /**
