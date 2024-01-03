@@ -1,6 +1,7 @@
 package xyz.atsumeru.ksk2atsu.managers;
 
 import me.tongfei.progressbar.ProgressBar;
+import xyz.atsumeru.ksk2atsu.App;
 import xyz.atsumeru.ksk2atsu.utils.FileUtils;
 import xyz.atsumeru.ksk2atsu.utils.ProgressBarBuilder;
 
@@ -44,7 +45,9 @@ public class ExtensionChanger {
             Path newFilePath = new File(file.getParent(), changeExtension(file, changeTo)).toPath();
             Files.move(file.toPath(), newFilePath);
         } catch (IOException e) {
-            e.printStackTrace();
+            if (App.IS_DEBUG) {
+                e.printStackTrace();
+            }
         }
     }
 

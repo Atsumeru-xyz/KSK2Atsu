@@ -5,6 +5,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
+import xyz.atsumeru.ksk2atsu.App;
 import xyz.atsumeru.ksk2atsu.utils.ComicUtils;
 import xyz.atsumeru.ksk2atsu.utils.FileUtils;
 import xyz.atsumeru.ksk2atsu.utils.ProgressBarBuilder;
@@ -141,7 +142,10 @@ public class CoversDownloader {
 
             // Parse cover url, remove -thumb modifier and fix some known issues
             return ComicUtils.fixCoverUrl(html.substring(indexStart, indexEnd).replace("-thumb", ""));
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            if (App.IS_DEBUG) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
@@ -175,9 +179,15 @@ public class CoversDownloader {
                     outputStream.close();
                     return true;
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                if (App.IS_DEBUG) {
+                    e.printStackTrace();
+                }
             }
-        } catch (Exception ignored) {
+        } catch (Exception e) {
+            if (App.IS_DEBUG) {
+                e.printStackTrace();
+            }
         }
         return false;
     }
