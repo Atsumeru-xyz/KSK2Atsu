@@ -120,7 +120,11 @@ public class BookInfo {
         putJSON(obj, "translators", ArrayUtils.splitString(content.getPublisher()));
         putJSON(obj, "parodies", ArrayUtils.splitString(content.getParodies()));
         putJSON(obj, "circles", ArrayUtils.splitString(content.getCircles()));
-        putJSON(obj, "magazines", ArrayUtils.splitString(content.getMagazine()));
+        putJSON(obj, "magazines", ArrayUtils.splitString(
+                Optional.ofNullable(content.getMagazine())
+                        .map(str -> str.replace("Comic", "COMIC"))
+                        .orElse("")
+        ));
 
         // Genres/Tags
         putJSON(obj, "tags", content.getTags());
