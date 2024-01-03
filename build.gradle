@@ -8,7 +8,7 @@ plugins {
 
 mainClassName = 'xyz.atsumeru.ksk2atsu.App'
 group = 'xyz.atsumeru'
-version = '1.0'
+version = '1.1'
 
 repositories {
     mavenCentral()
