@@ -98,7 +98,7 @@ public class BookInfo {
 
         // Titles
         putJSON(obj, "title", content.getTitle());
-        putJSON(obj, "alt_title", content.getAuthor());
+        putJSON(obj, "alt_title", isSerie ? content.getAuthor() : null);
 
         // Main info
         putJSON(obj, "country", "Japan");
