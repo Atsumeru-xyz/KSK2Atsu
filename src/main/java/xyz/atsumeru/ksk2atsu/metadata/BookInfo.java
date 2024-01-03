@@ -14,23 +14,22 @@ import xyz.atsumeru.ksk2atsu.zip.ZipIterator;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Model for book_info.json metadata that will be saved into all archives in raw dump
  */
 public class BookInfo {
     @Getter
+    private String link;
+    @Getter
     private String title;
     @Getter
     private String authors;
     @Getter
-    private String event;
+    private List<String> parodies;
     @Getter
-    private String link;
+    private String event;
 
     /**
      * Save metadata into file in filesystem
