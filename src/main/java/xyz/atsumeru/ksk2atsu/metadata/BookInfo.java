@@ -129,7 +129,7 @@ public class BookInfo {
         putJSON(obj, "age_rating", "ADULTS_ONLY");
 
         // Statuses
-        putJSON(obj, "status", !isSerie ? "COMPLETE" : "ONGOING");
+        putJSON(obj, "status", !isSerie ? "COMPLETE" : "MAGAZINE");
         putJSON(obj, "translation_status", !isSerie ? "COMPLETE" : "ONGOING");
         putJSON(obj, "censorship", content.getCensorship());
         putJSON(obj, "content_type", isDoujinshi ? "DOUJINSHI" : "HENTAI_MANGA");
