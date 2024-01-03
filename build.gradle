@@ -42,9 +42,6 @@ dependencies {
     // Natural Comparator
     implementation 'net.grey-panther:natural-comparator:1.1'
 
-    // Fuzzy Search
-    implementation 'me.xdrop:fuzzywuzzy:1.2.0'
-
     // ConsoleUI
     implementation 'de.codeshelf.consoleui:consoleui:0.0.13'
 

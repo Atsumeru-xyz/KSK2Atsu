@@ -1,7 +1,5 @@
 package xyz.atsumeru.ksk2atsu.utils;
 
-import me.xdrop.fuzzywuzzy.FuzzySearch;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -11,17 +9,6 @@ import java.util.Optional;
  * Small collection of {@link String} utils
  */
 public class StringUtils {
-
-    /**
-     * Get two {@link String} similarity from 0 to 100 using {@link FuzzySearch}
-     *
-     * @param s1 first {@link String}
-     * @param s2 second {@link String}
-     * @return similarity from 0 to 100
-     */
-    public static int getStringsSimilarity(String s1, String s2) {
-        return isNotEmpty(s1) && isNotEmpty(s2) ? FuzzySearch.ratio(s1.toLowerCase(), s2.toLowerCase()) : 0;
-    }
 
     /**
      * Check is given {@link String} is not empty (contains at least one character)
