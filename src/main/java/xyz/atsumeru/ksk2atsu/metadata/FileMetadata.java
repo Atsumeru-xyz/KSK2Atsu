@@ -3,6 +3,7 @@ package xyz.atsumeru.ksk2atsu.metadata;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import xyz.atsumeru.ksk2atsu.utils.ArrayUtils;
 import xyz.atsumeru.ksk2atsu.utils.Pair;
 import xyz.atsumeru.ksk2atsu.utils.StringUtils;
 
@@ -283,25 +284,35 @@ public class FileMetadata {
     }
 
     /**
-     * Get Url for file from {@link YAMLContent#getURL()}
+     * Get Url for file from {@link YAMLContent#getURL()} or {@link BookInfo#getLink()}
      *
      * @return {@link String} url
      */
     public String getUrl() {
-        return Optional.ofNullable(yamlContent).map(YAMLContent::getURL).orElse(null);
+        return Optional.ofNullable(yamlContent)
+                .map(YAMLContent::getURL)
+                .orElseGet(() -> Optional.ofNullable(bookInfo)
+                        .map(BookInfo::getLink)
+                        .orElse(null));
     }
 
     /**
-     * Get Magazine for file from {@link YAMLContent#getMagazine()}
+     * Get Magazine for file from {@link YAMLContent#getMagazine()}  or {@link BookInfo#getMagazines()} ()}
      *
      * @return {@link String} magazine
      */
     public String getMagazine() {
         String magazine = Optional.ofNullable(yamlContent)
                 .map(YAMLContent::getMagazine)
-                .filter(magazines -> !magazines.isEmpty())
+                .filter(ArrayUtils::isNotEmpty)
                 .map(magazines -> magazines.get(getMagazineIndex()))
-                .orElseGet(this::getMagazineWithIssueFromFileName);
+                .orElseGet(
+                        () -> Optional.ofNullable(bookInfo)
+                                .map(BookInfo::getMagazines)
+                                .filter(ArrayUtils::isNotEmpty)
+                                .map(magazines -> magazines.get(0))
+                                .orElseGet(this::getMagazineWithIssueFromFileName)
+                );
 
         return isValidMagazine(magazine) ? magazine : null;
     }
@@ -327,14 +338,19 @@ public class FileMetadata {
     }
 
     /**
-     * Get Publisher for file from file name using {@link #PUBLISHER_PATTERN} with fixes for some known problems and broken titles
+     * Get Publisher for file from {@link BookInfo#getPublisher()} or from file name using {@link #PUBLISHER_PATTERN}
+     * with fixes for some known problems and broken titles
      *
      * @return {@link String} publisher
      */
     public String getPublisher() {
-        String originalName = file.getName().replace("(1)", "");
-        String name = originalName.replaceAll(PUBLISHER_PATTERN, "$2");
-        return !StringUtils.equalsIgnoreCase(originalName, name) ? fixSomeKnownPublisherProblems(originalName, name) : getPublisherForSomeBrokenTitles(originalName);
+        return Optional.ofNullable(bookInfo)
+                .map(BookInfo::getPublisher)
+                .orElseGet(() -> {
+                    String originalName = file.getName().replace("(1)", "");
+                    String name = originalName.replaceAll(PUBLISHER_PATTERN, "$2");
+                    return !StringUtils.equalsIgnoreCase(originalName, name) ? fixSomeKnownPublisherProblems(originalName, name) : getPublisherForSomeBrokenTitles(originalName);
+                });
     }
 
     /**

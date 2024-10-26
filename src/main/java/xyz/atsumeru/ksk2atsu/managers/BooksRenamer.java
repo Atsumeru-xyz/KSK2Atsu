@@ -66,7 +66,8 @@ public class BooksRenamer {
                         parentDir.getParentFile(),
                         Optional.ofNullable(fileMetadata.getBookInfo())
                                 .map(BookInfo::getAuthors)
-                                .filter(StringUtils::isNotEmpty)
+                                .filter(ArrayUtils::isNotEmpty)
+                                .map(list -> list.get(0))
                                 .map(ComicUtils::getArtistReplacedDeniedSymbols)
                                 .orElse(App.UNKNOWN)
                 );
@@ -96,7 +97,8 @@ public class BooksRenamer {
             // Create new file name using scheme: (event) [author] book name.cbz
             String author = Optional.ofNullable(fileMetadata.getBookInfo())
                     .map(BookInfo::getAuthors)
-                    .filter(StringUtils::isNotEmpty)
+                    .filter(ArrayUtils::isNotEmpty)
+                    .map(list -> list.get(0))
                     .orElseGet(
                             () -> Optional.ofNullable(fileMetadata.getYamlContent())
                                     .map(YAMLContent::getArtist)

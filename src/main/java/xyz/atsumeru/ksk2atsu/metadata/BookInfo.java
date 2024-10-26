@@ -1,9 +1,11 @@
 package xyz.atsumeru.ksk2atsu.metadata;
 
+import com.google.gson.annotations.JsonAdapter;
 import lombok.Getter;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import xyz.atsumeru.ksk2atsu.App;
+import xyz.atsumeru.ksk2atsu.adapters.StringToListAdapter;
 import xyz.atsumeru.ksk2atsu.database.enums.CatalogType;
 import xyz.atsumeru.ksk2atsu.database.models.Content;
 import xyz.atsumeru.ksk2atsu.utils.ArrayUtils;
@@ -25,9 +27,14 @@ public class BookInfo {
     @Getter
     private String title;
     @Getter
-    private String authors;
+    @JsonAdapter(StringToListAdapter.class)
+    private List<String> authors;
     @Getter
     private List<String> parodies;
+    @Getter
+    private List<String> magazines;
+    @Getter
+    private String publisher;
     @Getter
     private String event;
 
@@ -115,7 +122,7 @@ public class BookInfo {
         putJSON(obj, "description", content.getDescription());
 
         // Info lists
-        putJSON(obj, "authors", content.getAuthor());
+        putJSON(obj, "authors", ArrayUtils.splitString(content.getAuthor()));
         putJSON(obj, "artists", ArrayUtils.splitString(content.getArtists()));
         putJSON(obj, "languages", ArrayUtils.splitString(content.getLanguage()));
         putJSON(obj, "translators", ArrayUtils.splitString(content.getPublisher()));

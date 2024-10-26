@@ -81,6 +81,7 @@ public class MetadataParser {
             // Construct FileMetadata from parsed YAMLContent and BookInfo
             return new FileMetadata(zipFile, yamlContent, bookInfo);
         } catch (Exception e) {
+            System.err.println("Error opening file: " + zipFile);
             e.printStackTrace();
         }
         return new FileMetadata(zipFile, null, null);

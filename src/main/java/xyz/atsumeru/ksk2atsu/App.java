@@ -1,7 +1,8 @@
 package xyz.atsumeru.ksk2atsu;
 
 import de.codeshelf.consoleui.elements.ConfirmChoice;
-import de.codeshelf.consoleui.prompt.*;
+import de.codeshelf.consoleui.prompt.ConsolePrompt;
+import de.codeshelf.consoleui.prompt.PromtResultItemIF;
 import de.codeshelf.consoleui.prompt.builder.PromptBuilder;
 import jline.TerminalFactory;
 import org.fusesource.jansi.Ansi;
@@ -17,8 +18,8 @@ import xyz.atsumeru.ksk2atsu.utils.FileUtils;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class App {
@@ -63,22 +64,18 @@ public class App {
         // Install ANSI console support
         AnsiConsole.systemInstall();
 
-        // Warn if in debug mode
-        if (App.IS_DEBUG) {
-            System.err.println("WARNING! Running in Debug mode!");
-        }
-
         // Print description message
         System.out.println(
                 Ansi.ansi()
                         .eraseScreen()
                         .reset()
+                        // Warn if in debug mode
+                        .render(IS_DEBUG ? "WARNING! Running in Debug mode!\n\n" : "")
                         .render(APP_NAME)
                         .render(" ")
                         .render(APP_VERSION)
                         .render("\n\n")
-                        .render("Simple tool that helps you migrate your KSK (Koushoku) rip into Atsumeru-ready dump organized by Magazines/Doujins/Books and filled with metadata")
-                        .render("\n")
+                        .render("Simple tool that helps you migrate your KSK (Koushoku) rip into Atsumeru-ready dump organized by Magazines/Doujins/Books and filled with metadata\n")
         );
 
         // Ask questions
